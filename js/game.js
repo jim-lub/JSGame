@@ -12,7 +12,7 @@ class Game {
 
     this.level = new Level();
 
-    // this.player.collision = new collisionDetection();
+    this.player.collision = new CollisionDetection();
 
   }
 
@@ -25,9 +25,9 @@ class Game {
   }
 
   render() {
-    this.update();
-
     this.ctx.clearRect(0, 0, 1000, 600);
+
+    this.update();
 
     this.player.render(this.ctx);
     this.level.build(this.ctx);
@@ -36,16 +36,31 @@ class Game {
   }
 
   update() {
-    if (this.ctrls.isPressed('a') || this.ctrls.isPressed('d')) {
+    this.player.collision.listen({
+      player: {
+        pos: {x: this.player.pos.x, y: this.player.pos.y},
+        motion: {hor: this.player.motion.hor, ver: this.player.motion.ver},
+        size: {width: this.player.DEFAULTS.width, height: this.player.DEFAULTS.height}
+      },
+      static_tiles: this.level.static_tiles
+    });
+
+    if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
 
       if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
       if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
 
     } else {
-      this.player.idle();
+      if (this.player.collision.hit('y')) {
+        this.player.idle();
+      } else {
+        this.player.fall();
+      }
     }
 
-    if (this.ctrls.isPressed('space')) console.log(this.level.tiles);
+    this.player.update();
+
+    if (this.ctrls.isPressed('space')) console.log(this.level.static_tiles);
   }
 
 }

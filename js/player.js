@@ -2,8 +2,8 @@
 class Player {
   constructor() {
     this.pos = {
-      x: 50,
-      y: 50
+      x: 150,
+      y: 150
     };
 
     this.motion = {
@@ -32,14 +32,18 @@ class Player {
     this.motion.hor = this.DEFAULTS.run.velocity[direction];
   }
 
+  fall() {
+    this.motion.ver = 2;
+  }
+
   update() {
-    this.pos.x += this.motion.hor;
-    this.pos.y += this.motion.ver;
+    if (!this.collision.hit('x')) this.pos.x += this.motion.hor;
+    if (!this.collision.hit('y')) this.pos.y += this.motion.ver;
   }
 
   render(ctx) {
-    this.update();
-
+    ctx.globalAlpha = 0.2;
     ctx.fillRect(this.pos.x, this.pos.y, this.DEFAULTS.width, this.DEFAULTS.height);
+    ctx.globalAlpha = 1;
   }
 }
