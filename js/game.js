@@ -45,6 +45,8 @@ class Game {
       static_tiles: this.level.static_tiles
     });
 
+    this.player.update();
+
     if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
 
       if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
@@ -52,15 +54,16 @@ class Game {
 
     } else {
       if (this.player.collision.hit('y')) {
-        this.player.idle();
+        if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
+          this.player.jump();
+        } else {
+          this.player.idle();
+        }
       } else {
         this.player.fall();
       }
     }
 
-    this.player.update();
-
-    if (this.ctrls.isPressed('space')) console.log(this.level.static_tiles);
   }
 
 }

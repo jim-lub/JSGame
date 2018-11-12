@@ -23,24 +23,22 @@ class CollisionDetection {
   * CHECK FOR COLLISIONS
   *******************************************/
   get_update({player, hitbox, static_tiles}, axis) {
-    if (axis === 'x') player.motion.ver = 0;
-    if (axis === 'y') player.motion.hor = 0;
 
     let isColliding = [];
 
     static_tiles.forEach(tile => {
-      if (this.get_boxCollision({player, hitbox, tile})) isColliding.push(tile);
+      if (this.get_boxCollision({player, hitbox, tile}, axis)) isColliding.push(true);
     });
 
 
     return (isColliding.length > 0) ? true : false;
   }
 
-  get_boxCollision({player, hitbox, tile}) {
+  get_boxCollision({player, hitbox, tile}, axis) {
     let isColliding = false;
 
     for (let i = 0; i < hitbox.collisionPoints.length; i++) {
-      if (this.get_pointCollision({player, point: hitbox.collisionPoints[i], tile})) {
+      if (this.get_pointCollision({player, point: hitbox.collisionPoints[i], tile}, axis)) {
         isColliding = true;
         break;
       }
@@ -49,9 +47,14 @@ class CollisionDetection {
     return (isColliding) ? true : false;
   }
 
-  get_pointCollision({player, point, tile}) {
-    let collisionX = point.x + player.motion.hor >= tile.x && point.x + player.motion.hor <= tile.x + tile.width;
-    let collisionY = point.y + player.motion.ver >= tile.y && point.y + player.motion.ver <= tile.y + tile.height;
+  get_pointCollision({player, point, tile}, axis) {
+    let verticalMotion = player.motion.ver;
+    let horizontalMotion = player.motion.hor;
+    if (axis === 'x') verticalMotion = 0;
+    if (axis === 'y') horizontalMotion = 0;
+
+    let collisionX = point.x + horizontalMotion >= tile.x && point.x + horizontalMotion <= tile.x + tile.width;
+    let collisionY = point.y + verticalMotion >= tile.y && point.y + verticalMotion <= tile.y + tile.height;
 
     return (collisionX && collisionY) ? true : false;
   }

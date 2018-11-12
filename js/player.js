@@ -33,7 +33,11 @@ class Player {
   }
 
   fall() {
-    this.motion.ver = 2;
+    this.motion.ver += 0.2;
+  }
+
+  jump() {
+    this.motion.ver += -5;
   }
 
   update() {
