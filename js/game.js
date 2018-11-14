@@ -21,11 +21,21 @@ class Game {
   }
 
   start() {
+    this.level.build();
+
     window.requestAnimationFrame(this.render.bind(this));
   }
 
   render() {
     this.ctx.clearRect(0, 0, 1000, 600);
+    this.level.static_tiles = [];
+
+    let bgimage = new Image();
+    bgimage.src = "assets/backgrounds/forest.png";
+    this.ctx.drawImage(bgimage, 0, 0, 960, 480);
+
+    this.level.render('block_01', 4, this.ctx);
+    this.level.render('block_01', 5, this.ctx);
 
     this.update();
 
@@ -45,22 +55,27 @@ class Game {
       static_tiles: this.level.static_tiles
     });
 
+    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
+
     this.player.update();
 
-    if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
+    if (!this.player.collision.hit('y')) {
+      this.player.fall();
 
       if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
       if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
 
-    } else {
-      if (this.player.collision.hit('y')) {
-        if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
-          this.player.jump();
-        } else {
-          this.player.idle();
-        }
+    } else if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
+      if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
+      if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
+      if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
+        this.player.jump();
+      }
+    }  else {
+      if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
+        this.player.jump();
       } else {
-        this.player.fall();
+        this.player.idle();
       }
     }
 

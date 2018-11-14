@@ -12,7 +12,7 @@ class CollisionDetection {
 
   listen({player, static_tiles}) {
     this.set_update({player});
-    this.drawHitBox();
+    // this.drawHitBox();
     this.drawCollisionPoints();
 
     this.x = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'x')) ? true : false;
@@ -23,13 +23,12 @@ class CollisionDetection {
   * CHECK FOR COLLISIONS
   *******************************************/
   get_update({player, hitbox, static_tiles}, axis) {
-
     let isColliding = [];
 
     static_tiles.forEach(tile => {
+      // if (tile.x < (hitbox.pos.x - 300) || (hitbox.pos.x + 300) > tile.x) continue;
       if (this.get_boxCollision({player, hitbox, tile}, axis)) isColliding.push(true);
     });
-
 
     return (isColliding.length > 0) ? true : false;
   }

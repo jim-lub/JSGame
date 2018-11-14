@@ -12,12 +12,12 @@ class Player {
     };
 
     this.DEFAULTS = {
-      width: 50,
-      height: 50,
+      width: 41,
+      height: 57,
       actions: ['idle', 'run', 'jump'],
       idle: {},
       run: {
-        velocity: {left: -3, right: 3}
+        velocity: {left: -2, right: 2}
       },
       jump: {}
     };
@@ -33,11 +33,11 @@ class Player {
   }
 
   fall() {
-    this.motion.ver += 0.2;
+    this.motion.ver += 0.7 * Math.PI / 10;
   }
 
   jump() {
-    this.motion.ver += -5;
+    this.motion.ver += -4;
   }
 
   update() {
@@ -46,8 +46,11 @@ class Player {
   }
 
   render(ctx) {
-    ctx.globalAlpha = 0.2;
-    ctx.fillRect(this.pos.x, this.pos.y, this.DEFAULTS.width, this.DEFAULTS.height);
+    ctx.globalAlpha = 1;
+    let image = new Image();
+    image.src = "assets/sprites/charTest_64.png";
+    ctx.drawImage(image, this.pos.x, this.pos.y, 41, 57);
+    // ctx.fillRect(this.pos.x, this.pos.y, this.DEFAULTS.width, this.DEFAULTS.height);
     ctx.globalAlpha = 1;
   }
 }
