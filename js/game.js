@@ -27,15 +27,17 @@ class Game {
   }
 
   render() {
-    this.ctx.clearRect(0, 0, 1000, 600);
+    this.ctx.clearRect(0, 0, 1280, 640);
     this.level.static_tiles = [];
 
     let bgimage = new Image();
-    bgimage.src = "assets/backgrounds/forest.png";
-    this.ctx.drawImage(bgimage, 0, 0, 960, 480);
+    bgimage.src = "assets/backgrounds/forest-castle.png";
+    this.ctx.drawImage(bgimage, 0, 0, 1280, 640);
 
-    this.level.render('block_01', 4, this.ctx);
-    this.level.render('block_01', 5, this.ctx);
+    this.level.render('block_01', 4, this.ctx, 0, 0);
+    this.level.render('block_01', 5, this.ctx, 0, 0);
+    this.level.render('block_02', 4, this.ctx, 640, 0);
+    this.level.render('block_02', 5, this.ctx, 640, 0);
 
     this.update();
 
