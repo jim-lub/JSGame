@@ -213,6 +213,7 @@ class PlayerAnimations {
 
       frameSequence.push({
         name: cur.name,
+        // image: game.assets.sprites.player.animation_attack_left,
         image: this.loadImage(config.defaults.src[direction]),
         sX: cur.sX,
         sY: cur.sY,

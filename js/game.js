@@ -2,6 +2,9 @@
 
 class Game {
   constructor() {
+    this.config = {
+      assets: new Config_Assets()
+    };
     this.ctx = document.getElementById('canvas').getContext('2d');
 
     this.ctrls = new Controls();
@@ -15,10 +18,45 @@ class Game {
     this.player.animations = new PlayerAnimations();
     this.player.collision = new CollisionDetection();
 
+    this.assets = {
+      sprites: {player: {}},
+      tilesets: {},
+      backgrounds: {}
+    };
+  }
+
+  loadImage(src) {
+    return new Promise((resolve, reject) => {
+      let image = new Image();
+      image.src = src;
+      resolve(image);
+    });
+  }
+
+  preloadAssets(type, objName) {
+    return new Promise((resolve, reject) => {
+      let promises = this.config.assets[type]()[objName].map(obj => {
+        return this.loadImage(`assets/${obj.folder}${obj.file}`)
+          .then(image => {
+            console.log(obj.name);
+            this.assets[type][objName][`${obj.name}`] = image;
+          })
+          .catch(e => console.log(e));
+      });
+
+      Promise.all(promises).then(() => resolve());
+    });
   }
 
   init() {
+    // Preloading all assets
+    let assets = [
+      this.preloadAssets('sprites', 'player')
+    ];
 
+    Promise.all(assets).then(() => {
+      this.start();
+    });
   }
 
   start() {
@@ -90,4 +128,3 @@ class Game {
 
 const game = new Game();
 game.init();
-game.start();
