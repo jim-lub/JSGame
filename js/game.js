@@ -12,6 +12,7 @@ class Game {
 
     this.level = new Level();
 
+    this.player.animations = new PlayerAnimations();
     this.player.collision = new CollisionDetection();
 
   }
@@ -22,6 +23,7 @@ class Game {
 
   start() {
     this.level.build();
+    this.player.animations.init();
 
     window.requestAnimationFrame(this.render.bind(this));
   }
@@ -61,23 +63,24 @@ class Game {
 
     this.player.update();
 
-    if (!this.player.collision.hit('y')) {
+    if (!this.player.isTouchingFloor()) {
       this.player.fall();
-
-      if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
-      if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
 
     } else if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
       if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
       if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
-      if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
+      if (this.ctrls.isPressed('space') && this.player.isTouchingFloor()) {
         this.player.jump();
       }
     }  else {
-      if (this.ctrls.isPressed('space') && this.player.collision.hit('y')) {
+      if (this.ctrls.isPressed('space') && this.player.isTouchingFloor()) {
         this.player.jump();
       } else {
-        this.player.idle();
+        if (this.ctrls.isClicked('leftClick')) {
+          this.player.attack();
+        } else {
+          this.player.idle();
+        }
       }
     }
 

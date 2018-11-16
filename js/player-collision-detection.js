@@ -3,6 +3,7 @@ class CollisionDetection {
   constructor() {
     this.x = false;
     this.y = false;
+    this.floor = false;
     this.collided = [];
   }
 
@@ -13,10 +14,11 @@ class CollisionDetection {
   listen({player, static_tiles}) {
     this.set_update({player});
     // this.drawHitBox();
-    this.drawCollisionPoints();
+    // this.drawCollisionPoints();
 
     this.x = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'x')) ? true : false;
     this.y = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'y')) ? true : false;
+    this.floor = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'floor')) ? true : false;
   }
 
   /*******************************************
@@ -49,8 +51,13 @@ class CollisionDetection {
   get_pointCollision({player, point, tile}, axis) {
     let verticalMotion = player.motion.ver;
     let horizontalMotion = player.motion.hor;
-    if (axis === 'x') verticalMotion = 0;
-    if (axis === 'y') horizontalMotion = 0;
+    if (axis === 'floor') {
+      verticalMotion = 1;
+      horizontalMotion = 0;
+    } else {
+      if (axis === 'x') verticalMotion = 0;
+      if (axis === 'y') horizontalMotion = 0;
+    }
 
     let collisionX = point.x + horizontalMotion >= tile.x && point.x + horizontalMotion <= tile.x + tile.width;
     let collisionY = point.y + verticalMotion >= tile.y && point.y + verticalMotion <= tile.y + tile.height;

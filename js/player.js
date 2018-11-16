@@ -3,7 +3,8 @@ class Player {
   constructor() {
     this.pos = {
       x: 150,
-      y: 150
+      y: 150,
+      dir: 'R'
     };
 
     this.motion = {
@@ -11,46 +12,94 @@ class Player {
       ver: 0
     };
 
+    this.actions = {
+      idle: {active: true},
+      run: {active: false},
+      jump: {active: false},
+      fall: {active: false},
+      attack: {active: false}
+    };
+
     this.DEFAULTS = {
-      width: 41,
-      height: 57,
-      actions: ['idle', 'run', 'jump'],
+      width: 90,
+      height: 70,
+      actions: ['idle', 'run', 'jump', 'fall', 'attack'],
       idle: {},
       run: {
-        velocity: {left: -2, right: 2}
+        acceleration: {left: -0.3, right: 0.3},
+        speed: {left: 3, right: 3}
       },
-      jump: {}
+      jump: {speed: -3},
+      fall: {speed: 2},
+      friction: 0.965,
+      friction2: 0.994,
+      gravity: 0.25
     };
   }
 
+  setToActive(action) {
+    // set all action.active to false
+    this.DEFAULTS.actions.forEach(actions => {
+      this.actions[actions].active = false;
+    });
+
+    // set current action.active to true
+    this.actions[action].active = true;
+  }
+
+  isActive(action) {
+    return (this.actions[action].active);
+  }
+
+  isTouchingFloor() {
+    return (this.collision.hit('floor'));
+  }
+
   idle() {
-    this.motion.hor = 0;
-    this.motion.ver = 0;
+    this.setToActive('idle');
   }
 
   run(direction) {
-    this.motion.hor = this.DEFAULTS.run.velocity[direction];
+    this.setToActive('run');
+    this.pos.dir = (direction === 'right') ? 'R' : 'L';
+    this.motion.hor += this.DEFAULTS.run.acceleration[direction] * this.DEFAULTS.friction;
+  }
+
+  attack() {
+    this.setToActive('attack');
   }
 
   fall() {
-    this.motion.ver += 0.7 * Math.PI / 10;
+    if (this.motion.ver > 0) this.setToActive('fall');
+    this.motion.ver += this.DEFAULTS.gravity;
   }
 
   jump() {
-    this.motion.ver += -4;
+    this.setToActive('jump');
+    this.motion.ver += this.DEFAULTS.jump.speed;
   }
 
   update() {
+    // Update the animation
+    this.DEFAULTS.actions.forEach(action => {
+      if (this.actions[action].active) this.animations.play(action, this.pos.dir);
+    });
+
+    if (this.isTouchingFloor()) this.motion.hor *= this.DEFAULTS.friction * this.DEFAULTS.friction; // friction on ground
+    if (!this.isTouchingFloor()) this.motion.hor *= this.DEFAULTS.friction2 * this.DEFAULTS.friction2; // friction in air
+
+
+    // Update the player position
+    if (this.collision.hit('x')) this.motion.hor = 0;
     if (!this.collision.hit('x')) this.pos.x += this.motion.hor;
     if (!this.collision.hit('y')) this.pos.y += this.motion.ver;
   }
 
   render(ctx) {
-    ctx.globalAlpha = 1;
-    let image = new Image();
-    image.src = "assets/sprites/charTest_64.png";
-    ctx.drawImage(image, this.pos.x, this.pos.y, 41, 57);
-    // ctx.fillRect(this.pos.x, this.pos.y, this.DEFAULTS.width, this.DEFAULTS.height);
-    ctx.globalAlpha = 1;
+    let currentFrame = {
+      image: this.animations.frame.image,
+      pos: this.animations.frame.pos
+    };
+    ctx.drawImage(currentFrame.image, currentFrame.pos.sX, currentFrame.pos.sY, currentFrame.pos.sWidth, currentFrame.pos.sHeight, this.pos.x + currentFrame.pos.offsetX, this.pos.y + currentFrame.pos.offsetY, currentFrame.pos.sWidth, currentFrame.pos.sHeight);
   }
 }
