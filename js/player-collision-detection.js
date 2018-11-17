@@ -15,10 +15,9 @@ class CollisionDetection {
     this.set_update({player});
     // this.drawHitBox();
     // this.drawCollisionPoints();
-
+    this.floor = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'floor')) ? true : false;
     this.x = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'x')) ? true : false;
     this.y = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'y')) ? true : false;
-    this.floor = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'floor')) ? true : false;
   }
 
   /*******************************************

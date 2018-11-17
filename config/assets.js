@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-class Config_Assets {
+class Cfg_Assets {
   constructor() {
     this.get = {
       sprites: ['player'],

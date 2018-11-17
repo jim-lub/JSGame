@@ -2,8 +2,8 @@
 
 class Game {
   constructor() {
-    this.config = {
-      assets: new Config_Assets()
+    this.CFG = {
+      assets: new Cfg_Assets(),
     };
     this.ctx = document.getElementById('canvas').getContext('2d');
 
@@ -35,7 +35,7 @@ class Game {
 
   preloadAssets(type, objName) {
     return new Promise((resolve, reject) => {
-      let promises = this.config.assets[type]()[objName].map(obj => {
+      let promises = this.CFG.assets[type]()[objName].map(obj => {
         return this.loadImage(`assets/${obj.folder}${obj.file}`)
           .then(image => {
             console.log(obj.name);
@@ -61,7 +61,7 @@ class Game {
 
   start() {
     this.level.build();
-    this.player.animations.init();
+    this.player.animations.init(this.assets.sprites.player);
 
     window.requestAnimationFrame(this.render.bind(this));
   }
@@ -97,9 +97,9 @@ class Game {
       static_tiles: this.level.static_tiles
     });
 
-    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
-
     this.player.update();
+
+    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
 
     if (!this.player.isTouchingFloor()) {
       this.player.fall();

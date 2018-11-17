@@ -4,7 +4,7 @@ class Player {
     this.pos = {
       x: 150,
       y: 150,
-      dir: 'R'
+      dir: 'right'
     };
 
     this.motion = {
@@ -61,7 +61,7 @@ class Player {
 
   run(direction) {
     this.setToActive('run');
-    this.pos.dir = (direction === 'right') ? 'R' : 'L';
+    this.pos.dir = (direction === 'right') ? 'right' : 'left';
     this.motion.hor += this.DEFAULTS.run.acceleration[direction] * this.DEFAULTS.friction;
   }
 
@@ -96,10 +96,7 @@ class Player {
   }
 
   render(ctx) {
-    let currentFrame = {
-      image: this.animations.frame.image,
-      pos: this.animations.frame.pos
-    };
-    ctx.drawImage(currentFrame.image, currentFrame.pos.sX, currentFrame.pos.sY, currentFrame.pos.sWidth, currentFrame.pos.sHeight, this.pos.x + currentFrame.pos.offsetX, this.pos.y + currentFrame.pos.offsetY, currentFrame.pos.sWidth, currentFrame.pos.sHeight);
+    let currentFrame = this.animations.getRenderData();
+    ctx.drawImage(currentFrame.sprite, currentFrame.data.sX, currentFrame.data.sY, currentFrame.data.sWidth, currentFrame.data.sHeight, this.pos.x + currentFrame.data.offsetX, this.pos.y + currentFrame.data.offsetY, currentFrame.data.sWidth, currentFrame.data.sHeight);
   }
 }
