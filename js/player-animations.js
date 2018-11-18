@@ -28,8 +28,17 @@ class PlayerAnimations {
     this.buildSequence('fall', 'left');
     this.buildSequence('fall', 'right');
 
+    this.buildSequence('slide', 'left');
+    this.buildSequence('slide', 'right');
+
     this.buildSequence('attack', 'left');
     this.buildSequence('attack', 'right');
+
+    this.buildSequence('attack_run', 'left');
+    this.buildSequence('attack_run', 'right');
+
+    this.buildSequence('attack_jump', 'left');
+    this.buildSequence('attack_jump', 'right');
   }
 
   buildSequence(action, direction) {

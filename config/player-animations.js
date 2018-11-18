@@ -101,6 +101,31 @@ class Cfg_PlayerAnimations {
     };
   }
 
+  slide() {
+    return {
+      name: 'fall',
+      sprite: {
+        left: 'animation_slide_left',
+        right: 'animation_slide_right'
+      },
+      direction: ['left', 'right'],
+      ticksPerSequence: 19,
+      ticksPerFrame: 10,
+      frames: 2,
+      overrideTicksPerFram: false,
+      // customTicksPerFrame: [['frameStart', 'frameEnd'], ['frameStart', 'frameEnd']],
+      sX: {
+        left: [60, 0],
+        right: [0, 60]
+      },
+      sY: [0, 0],
+      sWidth: 60,
+      sHeight: 70,
+      offsetX: {left: 0, right: 0},
+      offsetY: {left: 5, right: 5}
+    };
+  }
+
   attack() {
     return {
       name: 'attack',
@@ -120,6 +145,56 @@ class Cfg_PlayerAnimations {
       },
       sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       sWidth: 90,
+      sHeight: 70,
+      offsetX: {left: 0, right: 0},
+      offsetY: {left: 0, right: 0}
+    };
+  }
+
+  attack_run() {
+    return {
+      name: 'attack_run',
+      sprite: {
+        left: 'animation_attack_run_left',
+        right: 'animation_attack_run_right'
+      },
+      direction: ['left', 'right'],
+      ticksPerSequence: 44,
+      ticksPerFrame: 5,
+      frames: 9,
+      overrideTicksPerFram: false,
+      // customTicksPerFrame: [['frameStart', 'frameEnd'], ['frameStart', 'frameEnd']],
+      sX: {
+        left: [720, 630, 540, 450, 360, 270, 180, 90, 0],
+        right: [0, 90, 180, 270, 360, 450, 540, 630, 720]
+      },
+      sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      sWidth: 90,
+      sHeight: 70,
+      offsetX: {left: 0, right: 0},
+      offsetY: {left: 0, right: 0}
+    };
+  }
+
+  attack_jump() {
+    return {
+      name: 'attack_jump',
+      sprite: {
+        left: 'animation_attack_jump_left',
+        right: 'animation_attack_jump_right'
+      },
+      direction: ['left', 'right'],
+      ticksPerSequence: 39,
+      ticksPerFrame: 5,
+      frames: 8,
+      overrideTicksPerFram: false,
+      // customTicksPerFrame: [['frameStart', 'frameEnd'], ['frameStart', 'frameEnd']],
+      sX: {
+        left: [686, 588, 490, 392, 294, 196, 98, 0],
+        right: [0, 98, 196, 294, 392, 490, 588, 686]
+      },
+      sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      sWidth: 98,
       sHeight: 70,
       offsetX: {left: 0, right: 0},
       offsetY: {left: 0, right: 0}

@@ -38,7 +38,6 @@ class Game {
       let promises = this.CFG.assets[type]()[objName].map(obj => {
         return this.loadImage(`assets/${obj.folder}${obj.file}`)
           .then(image => {
-            console.log(obj.name);
             this.assets[type][objName][`${obj.name}`] = image;
           })
           .catch(e => console.log(e));
@@ -49,26 +48,33 @@ class Game {
   }
 
   init() {
-    // Preloading all assets
-    let assets = [
-      this.preloadAssets('sprites', 'player')
-    ];
+    let assets = [this.preloadAssets('sprites', 'player')];
 
-    Promise.all(assets).then(() => {
-      this.start();
-    });
+    Promise.all(assets)
+      .then(() => {
+        this.player.animations.init(this.assets.sprites.player);
+        this.player.init(this.ctx);
+        this.level.init();
+      })
+      .then(() => {
+        this.start();
+      })
+      .catch(e => console.log(e));
   }
 
   start() {
-    this.level.build();
-    this.player.animations.init(this.assets.sprites.player);
+    window.requestAnimationFrame(this.loop.bind(this));
+  }
 
-    window.requestAnimationFrame(this.render.bind(this));
+  loop() {
+    this.update();
+    this.render();
+
+    window.requestAnimationFrame(this.loop.bind(this));
   }
 
   render() {
     this.ctx.clearRect(0, 0, 1280, 640);
-    this.level.static_tiles = [];
 
     let bgimage = new Image();
     bgimage.src = "assets/backgrounds/forest-castle.png";
@@ -79,12 +85,8 @@ class Game {
     this.level.render('block_02', 4, this.ctx, 640, 0);
     this.level.render('block_02', 5, this.ctx, 640, 0);
 
-    this.update();
 
-    this.player.render(this.ctx);
-    this.level.build(this.ctx);
-
-    window.requestAnimationFrame(this.render.bind(this));
+    this.player.render();
   }
 
   update() {
@@ -97,9 +99,16 @@ class Game {
       static_tiles: this.level.static_tiles
     });
 
+    this.level.resetCollisionArray();
     this.player.update();
 
     if (this.player.collision.hit('y')) this.player.motion.ver = 0;
+
+    if (this.ctrls.isClicked('leftClick')) {
+      this.player.attack(true);
+    } else {
+      this.player.attack(false);
+    }
 
     if (!this.player.isTouchingFloor()) {
       this.player.fall();
@@ -114,11 +123,7 @@ class Game {
       if (this.ctrls.isPressed('space') && this.player.isTouchingFloor()) {
         this.player.jump();
       } else {
-        if (this.ctrls.isClicked('leftClick')) {
-          this.player.attack();
-        } else {
-          this.player.idle();
-        }
+        this.player.idle();
       }
     }
 

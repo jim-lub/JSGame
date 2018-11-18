@@ -17,12 +17,16 @@ class Level {
     this.static_tiles = [];
   }
 
-  build() {
+  init() {
     this.image.dark32x32 = this.loadImage(this.imagesrc.dark32x32);
     this.image.dark64x64 = this.loadImage(this.imagesrc.dark64x64);
 
     this.setImageAtlasDark(this.imageAtlas.dark32x32, 32);
     this.setImageAtlasDark(this.imageAtlas.dark64x64, 64);
+  }
+
+  resetCollisionArray() {
+    this.static_tiles = [];
   }
 
   render(inputBlock, layer, ctx, offsetX, offsetY) {
