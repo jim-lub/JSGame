@@ -134,6 +134,10 @@ class Controls {
     if (this.MOUSE[btn].active) return true;
   }
 
+  isReleased(btn) {
+    if (!this.MOUSE[btn].active) return true;
+  }
+
   // returns true if key a is pressed after key b
   lastKeyPressed(a, b) {
     if (this.KEY[a].timestamp.keyDown > this.KEY[b].timestamp.keyDown) return true;

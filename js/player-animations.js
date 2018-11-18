@@ -75,6 +75,10 @@ class PlayerAnimations {
     }
   }
 
+  queue(action, direction) {
+
+  }
+
   play(action, direction) {
     this.tickCount++;
 

@@ -13,8 +13,6 @@ class CollisionDetection {
 
   listen({player, static_tiles}) {
     this.set_update({player});
-    // this.drawHitBox();
-    // this.drawCollisionPoints();
     this.floor = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'floor')) ? true : false;
     this.x = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'x')) ? true : false;
     this.y = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'y')) ? true : false;
@@ -25,6 +23,7 @@ class CollisionDetection {
   *******************************************/
   get_update({player, hitbox, static_tiles}, axis) {
     let isColliding = [];
+    this.collided = [];
 
     static_tiles.forEach(tile => {
       // if (tile.x < (hitbox.pos.x - 300) || (hitbox.pos.x + 300) > tile.x) continue;
@@ -39,6 +38,7 @@ class CollisionDetection {
 
     for (let i = 0; i < hitbox.collisionPoints.length; i++) {
       if (this.get_pointCollision({player, point: hitbox.collisionPoints[i], tile}, axis)) {
+        this.collided.push(hitbox.collisionPoints[i]);
         isColliding = true;
         break;
       }
@@ -69,10 +69,10 @@ class CollisionDetection {
   *******************************************/
   set_update({player}) {
     let _ = {
-      x: player.pos.x,
-      y: player.pos.y,
-      w: player.size.width,
-      h: player.size.height,
+      x: player.pos.x + player.hitbox.offsetX,
+      y: player.pos.y + player.hitbox.offsetY,
+      w: player.hitbox.width,
+      h: player.hitbox.height,
       p: {
         left: 5,
         top: 5,

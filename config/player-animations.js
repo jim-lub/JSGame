@@ -21,7 +21,7 @@ class Cfg_PlayerAnimations {
       sY: [0, 0, 0, 0, 0, 0, 0],
       sWidth: 60,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
+      offsetX: {left: -10, right: 0},
       offsetY: {left: 0, right: 0}
     };
   }
@@ -46,7 +46,7 @@ class Cfg_PlayerAnimations {
       sY: [0, 0, 0, 0, 0, 0, 0, 0],
       sWidth: 60,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
+      offsetX: {left: -12, right: 0},
       offsetY: {left: 0, right: 0}
     };
   }
@@ -71,8 +71,8 @@ class Cfg_PlayerAnimations {
       sY: [0, 0],
       sWidth: 60,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
-      offsetY: {left: 0, right: 0}
+      offsetX: {left: -13, right: 3},
+      offsetY: {left: 1, right: 1}
     };
   }
 
@@ -96,8 +96,8 @@ class Cfg_PlayerAnimations {
       sY: [0, 0],
       sWidth: 60,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
-      offsetY: {left: 0, right: 0}
+      offsetX: {left: 2, right: 1},
+      offsetY: {left: 2, right: 2}
     };
   }
 
@@ -146,7 +146,7 @@ class Cfg_PlayerAnimations {
       sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       sWidth: 90,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
+      offsetX: {left: -35, right: 1},
       offsetY: {left: 0, right: 0}
     };
   }
@@ -171,7 +171,7 @@ class Cfg_PlayerAnimations {
       sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       sWidth: 90,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
+      offsetX: {left: -35, right: 1},
       offsetY: {left: 0, right: 0}
     };
   }
@@ -196,8 +196,8 @@ class Cfg_PlayerAnimations {
       sY: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       sWidth: 98,
       sHeight: 70,
-      offsetX: {left: 0, right: 0},
-      offsetY: {left: 0, right: 0}
+      offsetX: {left: -40, right: -2},
+      offsetY: {left: 1, right: 1}
     };
   }
 

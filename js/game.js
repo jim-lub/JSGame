@@ -25,6 +25,9 @@ class Game {
     };
   }
 
+  /*******************************************
+  * preload assets, initialize and start game
+  *******************************************/
   loadImage(src) {
     return new Promise((resolve, reject) => {
       let image = new Image();
@@ -66,6 +69,9 @@ class Game {
     window.requestAnimationFrame(this.loop.bind(this));
   }
 
+  /*******************************************
+  * gameloop: update and render
+  *******************************************/
   loop() {
     this.update();
     this.render();
@@ -75,10 +81,12 @@ class Game {
 
   render() {
     this.ctx.clearRect(0, 0, 1280, 640);
-
     let bgimage = new Image();
     bgimage.src = "assets/backgrounds/forest-castle.png";
     this.ctx.drawImage(bgimage, 0, 0, 1280, 640);
+
+    this.player.collision.drawHitBox();
+    this.player.collision.drawCollisionPoints();
 
     this.level.render('block_01', 4, this.ctx, 0, 0);
     this.level.render('block_01', 5, this.ctx, 0, 0);
@@ -90,42 +98,27 @@ class Game {
   }
 
   update() {
+    if (this.ctrls.isPressed('d')) this.player.run('right');
+    if (this.ctrls.isPressed('a')) this.player.run('left');
+    if (this.ctrls.isPressed('space') && this.player.collision.hit('floor')) this.player.jump();
+    if (this.ctrls.isPressed('w')) this.player.setToActive('fall', null);
+    if (this.ctrls.isClicked('leftClick')) this.player.attack(true);
+    if (this.ctrls.isReleased('leftClick')) this.player.attack(false);
+
+    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
+
     this.player.collision.listen({
       player: {
         pos: {x: this.player.pos.x, y: this.player.pos.y},
         motion: {hor: this.player.motion.hor, ver: this.player.motion.ver},
-        size: {width: this.player.DEFAULTS.width, height: this.player.DEFAULTS.height}
+        size: {width: this.player.DEFAULTS.width, height: this.player.DEFAULTS.height},
+        hitbox: this.player.hitbox
       },
       static_tiles: this.level.static_tiles
     });
-
     this.level.resetCollisionArray();
+
     this.player.update();
-
-    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
-
-    if (this.ctrls.isClicked('leftClick')) {
-      this.player.attack(true);
-    } else {
-      this.player.attack(false);
-    }
-
-    if (!this.player.isTouchingFloor()) {
-      this.player.fall();
-
-    } else if (this.ctrls.isPressed('a') && !this.player.collision.hit('x') || this.ctrls.isPressed('d') && !this.player.collision.hit('x')) {
-      if (this.ctrls.lastKeyPressed('a', 'd')) this.player.run('left');
-      if (this.ctrls.lastKeyPressed('d', 'a')) this.player.run('right');
-      if (this.ctrls.isPressed('space') && this.player.isTouchingFloor()) {
-        this.player.jump();
-      }
-    }  else {
-      if (this.ctrls.isPressed('space') && this.player.isTouchingFloor()) {
-        this.player.jump();
-      } else {
-        this.player.idle();
-      }
-    }
 
   }
 
