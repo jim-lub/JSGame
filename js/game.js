@@ -101,17 +101,13 @@ class Game {
     if (this.player.collision.hit('floor') && this.ctrls.isPressed('a')) this.player.run('left');
     if (this.player.collision.hit('floor') && this.ctrls.isPressed('d')) this.player.run('right');
 
+    if (!this.player.collision.hit('floor') && this.ctrls.isPressed('a')) this.player.direction('left');
+    if (!this.player.collision.hit('floor') && this.ctrls.isPressed('d')) this.player.direction('right');
+
     if (this.player.collision.hit('floor') && this.ctrls.isPressed('space')) this.player.jump();
 
-
-    // if (this.ctrls.isPressed('d')) this.player.run('right');
-    // if (this.ctrls.isPressed('a')) this.player.run('left');
-    // if (this.ctrls.isPressed('space') && this.player.collision.hit('floor')) this.player.jump();
-    // if (this.ctrls.isPressed('w')) this.player.setToActive('fall', null);
-    // if (this.ctrls.isClicked('leftClick')) this.player.attack(true);
-    // if (this.ctrls.isReleased('leftClick')) this.player.attack(false);
-
-    if (this.player.collision.hit('y')) this.player.motion.ver = 0;
+    if (this.ctrls.isClicked('leftClick')) this.player.attack(true);
+    if (this.ctrls.isReleased('leftClick')) this.player.attack(false);
 
     this.player.collision.listen({
       player: {
@@ -122,6 +118,7 @@ class Game {
       },
       static_tiles: this.level.static_tiles
     });
+    // if (this.player.collision.hit('y')) this.player.motion.ver = 0;
     this.level.resetCollisionArray();
 
     this.player.update();

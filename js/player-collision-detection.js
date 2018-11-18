@@ -11,7 +11,17 @@ class CollisionDetection {
     return (this[axis] === true) ? true : false;
   }
 
+  distanceFromFloor(y) {
+    if (this.collided.length > 0) {
+      return this.collided[0].y - y;
+    } else {
+      return false;
+    }
+  }
+
   listen({player, static_tiles}) {
+    this.collided = [];
+
     this.set_update({player});
     this.floor = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'floor')) ? true : false;
     this.x = (this.get_update({player, hitbox: this.hitbox, static_tiles}, 'x')) ? true : false;
@@ -23,7 +33,6 @@ class CollisionDetection {
   *******************************************/
   get_update({player, hitbox, static_tiles}, axis) {
     let isColliding = [];
-    this.collided = [];
 
     static_tiles.forEach(tile => {
       // if (tile.x < (hitbox.pos.x - 300) || (hitbox.pos.x + 300) > tile.x) continue;
@@ -51,7 +60,7 @@ class CollisionDetection {
     let verticalMotion = player.motion.ver;
     let horizontalMotion = player.motion.hor;
     if (axis === 'floor') {
-      verticalMotion = 1;
+      verticalMotion = 0.5;
       horizontalMotion = 0;
     } else {
       if (axis === 'x') verticalMotion = 0;
@@ -74,10 +83,10 @@ class CollisionDetection {
       w: player.hitbox.width,
       h: player.hitbox.height,
       p: {
-        left: 5,
-        top: 5,
-        right: 5,
-        bottom: 5
+        left: 2,
+        top: 2,
+        right: 2,
+        bottom: 2
       }
     };
 

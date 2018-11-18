@@ -34,13 +34,14 @@ class Player {
       actions: ['idle', 'run', 'jump', 'fall', 'slide', 'attack'],
       idle: {},
       run: {
-        acceleration: {left: -0.25, right: 0.25},
-        speed: {left: 2.5, right: 2.5}
+        acceleration: {left: -0.45, right: 0.45},
+        speed: {left: -3.5, right: 3.5}
       },
       jump: {speed: -3},
       fall: {speed: 2},
-      friction: 0.975,
-      friction2: 0.994,
+      air: {speed: {left: -1.8, right: 1.8}},
+      friction: 0.95,
+      friction2: 0.99,
       gravity: 0.25
     };
 
@@ -64,13 +65,12 @@ class Player {
 
   idle() {
     this.setToActive('idle');
-    // this.motion.hor = 0;
   }
 
   run(direction) {
     this.setToActive('run');
     this.pos.dir = direction;
-    this.motion.hor += this.DEFAULTS.run.acceleration[direction] * this.DEFAULTS.friction;
+    if (Math.abs(this.motion.hor) <= Math.abs(this.DEFAULTS.run.speed[direction])) this.motion.hor += this.DEFAULTS.run.acceleration[direction] * this.DEFAULTS.friction;
   }
 
   jump() {
@@ -80,7 +80,14 @@ class Player {
 
   fall() {
     if (this.motion.ver >= 0) this.setToActive('fall');
-    this.motion.ver += this.DEFAULTS.gravity * this.DEFAULTS.friction2;
+    this.motion.ver += this.DEFAULTS.gravity;
+  }
+
+  direction(direction) {
+    if (this.pos.dir !== direction || Math.abs(this.motion.hor) < 1) {
+      this.pos.dir = direction;
+      this.motion.hor += this.DEFAULTS.air.speed[direction] * this.DEFAULTS.friction;
+    }
   }
 
   init(ctx) {
@@ -100,8 +107,7 @@ class Player {
         if (this.actions.fall.active && this.actions.attack.active) this.animations.play('attack_jump', this.pos.dir);
       }
     } else {
-      if (!this.actions.jump.active) this.motion.ver = 0;
-      if (this.actions.run.active) {
+      if (this.actions.run.active && Math.abs(this.motion.hor) > 0) {
         if (this.actions.run.active && !this.actions.attack.active) this.animations.play('run', this.pos.dir);
         if (this.actions.run.active && this.actions.attack.active) this.animations.play('attack_run', this.pos.dir);
       } else if (this.actions.attack.active) {
@@ -113,11 +119,14 @@ class Player {
       }
     }
 
-    // if (this.actions.attack.active) this.animations.play('attack', this.pos.dir);
+    if (Math.abs(this.motion.hor) < 0.2) this.motion.hor = 0;
+    if (Math.abs(this.motion.ver) < 0.2) this.motion.ver = 0;
 
-    this.motion.hor *= this.DEFAULTS.friction * this.DEFAULTS.friction;
+    if (this.collision.hit('floor')) this.motion.hor *= this.DEFAULTS.friction * this.DEFAULTS.friction;
+    if (!this.collision.hit('floor')) this.motion.hor *= this.DEFAULTS.friction2 * this.DEFAULTS.friction2;
 
     if (this.collision.hit('x')) this.motion.hor = 0;
+    if (this.collision.hit('y')) this.motion.ver = 0;
     if (!this.collision.hit('x')) this.pos.x += this.motion.hor;
     if (!this.collision.hit('y')) this.pos.y += this.motion.ver;
   }
