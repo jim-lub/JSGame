@@ -159,8 +159,8 @@ class Cfg_PlayerAnimations {
         right: 'animation_attack_run_right'
       },
       direction: ['left', 'right'],
-      ticksPerSequence: 44,
-      ticksPerFrame: 5,
+      ticksPerSequence: 35,
+      ticksPerFrame: 4,
       frames: 9,
       overrideTicksPerFram: false,
       // customTicksPerFrame: [['frameStart', 'frameEnd'], ['frameStart', 'frameEnd']],
@@ -184,8 +184,8 @@ class Cfg_PlayerAnimations {
         right: 'animation_attack_jump_right'
       },
       direction: ['left', 'right'],
-      ticksPerSequence: 39,
-      ticksPerFrame: 5,
+      ticksPerSequence: 31,
+      ticksPerFrame: 4,
       frames: 8,
       overrideTicksPerFram: false,
       // customTicksPerFrame: [['frameStart', 'frameEnd'], ['frameStart', 'frameEnd']],

@@ -6,6 +6,7 @@ class PlayerAnimations {
     this.currentData = null;
     this.currentIndex = null;
     this.tickCount = 0;
+    this.queue = [];
     this.sequences = {};
     this.animations = {};
     this.sprites = null;
@@ -59,6 +60,7 @@ class PlayerAnimations {
       sequence.push({
         name: CFG.sprite[direction],
         index: i,
+        frames: CFG.frames,
         sprite: this.sprites[CFG.sprite[direction]],
         ticksPerSequence: CFG.ticksPerSequence,
         sX: CFG.sX[direction][i],
@@ -75,16 +77,13 @@ class PlayerAnimations {
     }
   }
 
-  queue(action, direction) {
-
-  }
-
   play(action, direction) {
     this.tickCount++;
 
     let sequence = this.sequences[`animation_${action}_${direction}`];
 
     sequence.forEach(frame => {
+      // if (this.currentIndex != frame.index) console.log(this.currentIndex);
       if (this.tickCount >= frame.start && this.tickCount <= frame.end && this.currentIndex != frame.index) {
         this.currentSprite = frame.sprite;
         this.currentData = {
